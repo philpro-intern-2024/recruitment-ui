@@ -1,33 +1,15 @@
 import { defineStore } from "pinia";
-import { useAPI, useAPIFormData, useAPIJSON } from "../composables/useAPI";
-
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  full_name?: string;
-}
+import { useAPI, useAPIJSON } from "../composables/useAPI";
+import {
+  type User,
+  type RegisterData,
+  type LoginData,
+} from "./models/UserModel";
 
 export interface State {
   user: User;
   accessToken: string;
   authReady: boolean;
-}
-
-export interface LoginData {
-  email: string;
-  password: string;
-}
-
-export interface RegisterData {
-  username: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-  password: string;
-  password_confirm: string;
 }
 
 export const useAuthStore = defineStore("auth", {
