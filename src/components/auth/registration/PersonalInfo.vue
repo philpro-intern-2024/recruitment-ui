@@ -5,7 +5,7 @@ import { ref } from "vue";
 const { registerData } = defineProps(["registerData"]);
 const emit = defineEmits(["switch"]);
 
-const errorFields = ref([]);
+const errorFields = ref([] as string[]);
 
 const next = () => {
   const error = checkEmptyFields();
@@ -26,12 +26,8 @@ const checkEmptyFields = () => {
   let arr = [];
   let excludes = ["suffix", "middleName", "upline", "uplineContact"];
 
-  for (const [key, value] of Object.entries(registerData.personalInfo)) {
-    if (!excludes.includes(key) && value === "") {
-      // console.log(key);
-      arr.push(key);
-    }
-  }
+  for (const [key, value] of Object.entries(registerData.personalInfo))
+    if (!excludes.includes(key) && value === "") arr.push(key);
 
   return arr;
 };

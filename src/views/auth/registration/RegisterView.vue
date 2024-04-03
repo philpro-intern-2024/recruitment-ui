@@ -47,7 +47,7 @@ const registerData = reactive<RegisterData>({
       city: "",
       brgy: "",
       street: "",
-      postalCode: 0,
+      postalCode: "",
     },
     secondary: {
       country: "",
@@ -55,7 +55,7 @@ const registerData = reactive<RegisterData>({
       city: "",
       brgy: "",
       street: "",
-      postalCode: 0,
+      postalCode: "",
     },
   },
   education: {
@@ -84,9 +84,9 @@ const next = (value: string) => {
   stepTitle.value = value;
 };
 
-const onFileChange = (file) => {
+const onFileChange = (file: any) => {
   profile.value = file;
-}
+};
 
 const submit = async () => {
   try {

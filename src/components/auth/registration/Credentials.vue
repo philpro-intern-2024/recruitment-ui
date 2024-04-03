@@ -6,7 +6,7 @@ const { registerData } = defineProps(["registerData"]);
 const emit = defineEmits(["switch"]);
 const showPassword = ref(false);
 const showPasswordConfirm = ref(false);
-const errorFields = ref([]);
+const errorFields = ref([] as string[]);
 
 const toggleShow = () => {
   console.log(registerData.credentials);

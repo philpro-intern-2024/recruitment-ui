@@ -4,7 +4,7 @@ import { ref } from "vue";
 
 const { registerData } = defineProps(["registerData"]);
 const emit = defineEmits(["switch"]);
-const errorFields = ref([]);
+const errorFields = ref([] as string[]);
 
 const prev = () => {
   emit("switch", "Credentials");

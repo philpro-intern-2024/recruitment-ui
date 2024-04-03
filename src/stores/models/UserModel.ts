@@ -21,7 +21,7 @@ export interface AddressType {
   city: string;
   brgy: string;
   street: string;
-  postalCode: Number;
+  postalCode: string;
 }
 
 export interface OtherInfo {
