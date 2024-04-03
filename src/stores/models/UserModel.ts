@@ -1,6 +1,6 @@
 export interface PersonalInfo {
   firstName: string;
-  middleName: string;
+  middleName: string | null;
   lastName: string;
   suffix: string;
   prefix: string;
@@ -19,6 +19,7 @@ export interface AddressType {
   country: string;
   province: string;
   city: string;
+  brgy: string;
   street: string;
   postalCode: Number;
 }
@@ -26,16 +27,17 @@ export interface AddressType {
 export interface OtherInfo {
   gender: string;
   maritalStatus: string;
-  birthDate: Date;
+  birthDate: string | Date;
   citizenship: string;
   mobileNumber: string;
   phoneNumber: string;
-  addresses: {
-    primaryAddress: AddressType;
-    additionalAddress: [AddressType] | null;
-  };
   websiteLink: string;
   facebookLink: string;
+}
+
+export interface Addresses{
+  primary: AddressType;
+  secondary: AddressType | null;
 }
 
 export interface Education {
@@ -44,15 +46,15 @@ export interface Education {
 }
 
 export interface SkillsProfExp {
-  specialSkills: [string];
-  workExperience: [string];
-  about: [string];
+  specialSkills: string[];
+  workExperience: string;
+  about: string;
 }
 
 export interface SalesExpRef {
   jobDesc: string;
-  salesTarget: Number;
-  references: [string];
+  salesTarget: number;
+  references: string;
 }
 
 export interface Profile {
@@ -85,6 +87,7 @@ export interface RegisterData {
   personalInfo: PersonalInfo;
   credentials: Credentials;
   otherInfo: OtherInfo;
+  address: Addresses;
   education: Education;
   skillsProfExp: SkillsProfExp;
   salesExpRef: SalesExpRef;

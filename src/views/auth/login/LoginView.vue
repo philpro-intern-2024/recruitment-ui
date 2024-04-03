@@ -104,7 +104,7 @@ const submit = async () => {
       <div class="mt-5 text-center">
         <p>
           Don’t have an account?
-          <span class="font-bold"><RouterLink to="/">Sign Up</RouterLink></span>
+          <span class="font-bold"><RouterLink to="/auth/register">Sign Up</RouterLink></span>
         </p>
       </div>
     </form>

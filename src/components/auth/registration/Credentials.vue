@@ -2,15 +2,19 @@
 import Stepper from "./Stepper.vue";
 import { ref, reactive } from "vue";
 
+const { registerData } = defineProps(["registerData"]);
 const emit = defineEmits(["switch"]);
 const showPassword = ref(false);
 const showPasswordConfirm = ref(false);
+const errorFields = ref([]);
 
 const toggleShow = () => {
+  console.log(registerData.credentials);
   showPassword.value = !showPassword.value;
 };
 
 const toggleShowConfirm = () => {
+  console.log(registerData.credentials);
   showPasswordConfirm.value = !showPasswordConfirm.value;
 };
 
@@ -19,7 +23,33 @@ const prev = () => {
 };
 
 const next = () => {
-  emit("switch", "OtherInfo");
+  const error = checkEmptyFields();
+
+  console.log(error, registerData.credentials);
+
+  if (error.length === 0) emit("switch", "OtherInfo");
+  else errorFields.value = error;
+};
+
+const onChange = (e: any) => {
+  registerData.credentials[e.target.name] = e.target.value;
+
+  const error = checkEmptyFields();
+
+  if (error) errorFields.value = error;
+};
+
+const checkEmptyFields = () => {
+  let arr = [];
+
+  for (const [key, value] of Object.entries(registerData.credentials)) {
+    if (value === "") {
+      // console.log(key);
+      arr.push(key);
+    }
+  }
+
+  return arr;
 };
 </script>
 
@@ -40,21 +70,35 @@ const next = () => {
         CREDENTIALS
       </h1>
       <form class="flex flex-col justify-center items-center">
-        <div class="grid grid-cols-2 w-full justify-center items-center gap-3">
-          <!-- Gender -->
+        <div class="grid grid-cols-2 w-full justify-start items-start gap-3">
+          <!-- Email Address -->
           <div class="w-full">
-            <label for="emailAddres" class="text-sm font-light text-[#777777]">
+            <label for="email" class="text-sm font-light text-[#777777]">
               Email Address
             </label>
             <input
               type="text"
-              name="emailAddress"
-              id="emailAddress"
-              autocomplete="emailAddress"
+              name="email"
+              id="email"
+              autocomplete="email"
               required
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('email')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.credentials.email"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('email')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Email Address is required
+            </p>
           </div>
+
           <!-- Username -->
           <div class="w-full">
             <label for="username" class="text-sm font-light text-[#777777]">
@@ -65,9 +109,23 @@ const next = () => {
               name="username"
               id="username"
               autocomplete="username"
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('username')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.credentials.username"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('username')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Username is required
+            </p>
           </div>
+
           <!-- Password -->
           <div class="w-full">
             <label for="password" class="text-sm font-light text-[#777777]">
@@ -77,72 +135,122 @@ const next = () => {
               <input
                 v-if="showPassword"
                 type="text"
-                class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                name="password"
+                id="password"
+                class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                :class="
+                  errorFields.includes('password')
+                    ? 'border border-red-500'
+                    : 'border border-gray-300'
+                "
+                :value="registerData.credentials.password"
+                @change="onChange($event)"
               />
               <input
                 v-else
                 type="password"
-                class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                name="password"
+                id="password"
+                class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                :class="
+                  errorFields.includes('password')
+                    ? 'border border-red-500'
+                    : 'border border-gray-300'
+                "
+                :value="registerData.credentials.password"
+                @change="onChange($event)"
               />
               <button
-                type="button"
-                @click.prevent="toggleShow"
+                @click.prevent="toggleShow()"
                 class="absolute inset-y-0 right-3"
               >
                 <v-icon
                   v-if="!showPassword"
                   name="bi-eye"
                   class="icon"
-                  fill="black"
+                  fill="#77777A"
                   scale="1.5"
                 />
                 <v-icon
                   v-else
                   name="bi-eye-slash"
                   class="icon"
-                  fill="black"
+                  fill="#77777A"
                   scale="1.5"
                 />
               </button>
             </div>
+            <p
+              v-if="errorFields.includes('password')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Password is required
+            </p>
           </div>
+
           <!-- Confirm Password -->
           <div class="w-full">
-            <label for="password" class="text-sm font-light text-[#777777]">
+            <label
+              for="passwordConfirmation"
+              class="text-sm font-light text-[#777777]"
+            >
               Re-type Password
             </label>
             <div class="relative">
               <input
                 v-if="showPasswordConfirm"
+                name="passwordConfirmation"
+                id="passwordConfirmation"
                 type="text"
-                class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                :class="
+                  errorFields.includes('passwordConfirmation')
+                    ? 'border border-red-500'
+                    : 'border border-gray-300'
+                "
+                :value="registerData.credentials.passwordConfirmation"
+                @change="onChange($event)"
               />
               <input
                 v-else
+                name="passwordConfirmation"
+                id="passwordConfirmation"
                 type="password"
-                class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                :class="
+                  errorFields.includes('passwordConfirmation')
+                    ? 'border border-red-500'
+                    : 'border border-gray-300'
+                "
+                :value="registerData.credentials.passwordConfirmation"
+                @change="onChange($event)"
               />
               <button
-                type="button"
-                @click.prevent="toggleShowConfirm"
+                @click.prevent="toggleShowConfirm()"
                 class="absolute inset-y-0 right-3"
               >
                 <v-icon
                   v-if="!showPasswordConfirm"
                   name="bi-eye"
                   class="icon"
-                  fill="black"
+                  fill="#77777A"
                   scale="1.5"
                 />
                 <v-icon
                   v-else
                   name="bi-eye-slash"
                   class="icon"
-                  fill="black"
+                  fill="#77777A"
                   scale="1.5"
                 />
               </button>
             </div>
+            <p
+              v-if="errorFields.includes('passwordConfirmation')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Re-type Password is required
+            </p>
           </div>
         </div>
         <div class="flex w-6/12 gap-x-4 mt-4">

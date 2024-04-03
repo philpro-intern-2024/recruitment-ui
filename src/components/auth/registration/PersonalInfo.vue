@@ -1,10 +1,39 @@
 <script setup lang="ts">
 import Stepper from "./Stepper.vue";
+import { ref } from "vue";
 
+const { registerData } = defineProps(["registerData"]);
 const emit = defineEmits(["switch"]);
 
+const errorFields = ref([]);
+
 const next = () => {
-  emit("switch", "Credentials");
+  const error = checkEmptyFields();
+
+  if (error.length === 0) emit("switch", "Credentials");
+  else errorFields.value = error;
+};
+
+const onChange = (e: any) => {
+  registerData.personalInfo[e.target.name] = e.target.value;
+
+  const error = checkEmptyFields();
+
+  if (error) errorFields.value = error;
+};
+
+const checkEmptyFields = () => {
+  let arr = [];
+  let excludes = ["suffix", "middleName", "upline", "uplineContact"];
+
+  for (const [key, value] of Object.entries(registerData.personalInfo)) {
+    if (!excludes.includes(key) && value === "") {
+      // console.log(key);
+      arr.push(key);
+    }
+  }
+
+  return arr;
 };
 </script>
 
@@ -25,7 +54,7 @@ const next = () => {
         PERSONAL INFORMATION
       </h1>
       <form class="flex flex-col justify-center items-center">
-        <div class="flex flex-wrap w-full justify-center items-center gap-3">
+        <div class="flex flex-wrap w-full justify-start items-start gap-3">
           <div class="w-2/12">
             <label for="prefix" class="text-sm font-light text-[#777777]">
               Prefix
@@ -36,8 +65,21 @@ const next = () => {
               id="prefix"
               autocomplete="prefix"
               required
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('prefix')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.personalInfo.prefix"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('prefix')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Prefix is required
+            </p>
           </div>
           <!-- FIRST NAME -->
           <div class="flex-auto">
@@ -50,8 +92,21 @@ const next = () => {
               id="firstName"
               autocomplete="firstName"
               required
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('firstName')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.personalInfo.firstName"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('firstName')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              First Name is required
+            </p>
           </div>
           <!-- MIDDLE NAME -->
           <div class="flex-auto">
@@ -64,6 +119,8 @@ const next = () => {
               id="middleName"
               autocomplete="middleName"
               class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :value="registerData.personalInfo.middleName"
+              @change="onChange($event)"
             />
           </div>
           <!-- LAST NAME -->
@@ -76,8 +133,21 @@ const next = () => {
               name="lastName"
               id="lastName"
               autocomplete="lastName"
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('lastName')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.personalInfo.lastName"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('lastName')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Last Name is required
+            </p>
           </div>
           <!-- SUFFIX -->
           <div class="w-2/12">
@@ -90,6 +160,8 @@ const next = () => {
               id="suffix"
               autocomplete="suffix"
               class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :value="registerData.personalInfo.suffix"
+              @change="onChange($event)"
             />
           </div>
           <div class="flex-auto">

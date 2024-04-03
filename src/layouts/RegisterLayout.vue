@@ -11,7 +11,7 @@ const props = defineProps(["title", "subText", "stepTitle"]);
     <div
       class="bg-white w-[70%] absolute left-0 rounded-r-[50px] h-screen"
       :class="
-        props.stepTitle === 'Address'
+      ['Address', 'SalesExp'].includes(props.stepTitle)
           ? 'overflow-y-auto py-10'
           : 'flex items-center'
       "

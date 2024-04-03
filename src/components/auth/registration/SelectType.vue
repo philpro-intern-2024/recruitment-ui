@@ -1,7 +1,9 @@
 <script setup lang="ts">
+const props = defineProps(["registerData"]);
 const emit = defineEmits(["switch"]);
 
-const next = () => {
+const next = (memberType: string) => {
+  props.registerData.memberType = memberType;
   emit("switch", "PersonalInfo");
 };
 </script>
@@ -18,13 +20,13 @@ const next = () => {
         <hr class="border-[#FFBC3A] w-3/12 rounded-md border-2 mt-2" />
       </div>
       <button
-        @click.prevent="next()"
+        @click.prevent="next('National')"
         class="w-9/12 bg-red-50 h-[75px] rounded-[16px] text-4xl font-bold bg-gradient-to-r from-[#131C39] to-[#367CFF] text-white shadow-[4px_4px_4px_0px_#00000024] transition duration-300 ease-in-out transform hover:scale-105"
       >
         NATIONAL
       </button>
       <button
-        @click.prevent="next()"
+        @click.prevent="next('International')"
         class="w-9/12 bg-red-50 h-[75px] rounded-[16px] text-4xl font-bold bg-gradient-to-r from-[#C68914] to-[#FFAA00] text-white shadow-[4px_4px_4px_0px_#00000024] transition duration-300 ease-in-out transform hover:scale-105"
       >
         INTERNATIONAL

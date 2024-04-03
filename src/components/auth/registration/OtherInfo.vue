@@ -1,14 +1,41 @@
 <script setup lang="ts">
 import Stepper from "./Stepper.vue";
+import { ref } from "vue";
 
+const { registerData } = defineProps(["registerData"]);
 const emit = defineEmits(["switch"]);
+const errorFields = ref([]);
 
 const prev = () => {
   emit("switch", "Credentials");
 };
 
 const next = () => {
-  emit("switch", "Address");
+  const error = checkEmptyFields();
+
+  if (error.length === 0) emit("switch", "Address");
+  else errorFields.value = error;
+};
+
+const onChange = (e: any) => {
+  registerData.otherInfo[e.target.name] = e.target.value;
+
+  const error = checkEmptyFields();
+
+  if (error) errorFields.value = error;
+};
+
+const checkEmptyFields = () => {
+  let arr = [];
+
+  for (const [key, value] of Object.entries(registerData.otherInfo)) {
+    if (value === "") {
+      // console.log(key);
+      arr.push(key);
+    }
+  }
+
+  return arr;
 };
 </script>
 
@@ -29,9 +56,9 @@ const next = () => {
         OTHER INFORMATION
       </h1>
       <form class="flex flex-col justify-center items-center">
-        <div class="flex flex-wrap w-full justify-center items-center gap-3">
+        <div class="flex flex-wrap w-full justify-start items-start gap-3">
           <!-- Gender -->
-          <div class="flex-auto">
+          <div class="flex-auto w-3/12">
             <label for="gender" class="text-sm font-light text-[#777777]">
               Gender
             </label>
@@ -41,11 +68,24 @@ const next = () => {
               id="gender"
               autocomplete="gender"
               required
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('gender')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.otherInfo.gender"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('gender')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Gender is required
+            </p>
           </div>
           <!-- Marital Status -->
-          <div class="flex-auto">
+          <div class="flex-auto w-4/12">
             <label
               for="maritalStatus"
               class="text-sm font-light text-[#777777]"
@@ -57,11 +97,24 @@ const next = () => {
               name="maritalStatus"
               id="maritalStatus"
               autocomplete="maritalStatus"
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('maritalStatus')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.otherInfo.maritalStatus"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('maritalStatus')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Marital Status is required
+            </p>
           </div>
           <!-- Birth Date -->
-          <div class="flex-auto">
+          <div class="flex-auto w-4/12">
             <label for="birthDate" class="text-sm font-light text-[#777777]">
               Birth Date
             </label>
@@ -71,10 +124,23 @@ const next = () => {
               id="birthDate"
               autocomplete="birthDate"
               class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('birthDate')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.otherInfo.birthDate"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('birthDate')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Birth Date is required
+            </p>
           </div>
           <!-- Citizenship -->
-          <div class="flex-auto">
+          <div class="flex-auto w-3/12">
             <label for="citizenship" class="text-sm font-light text-[#777777]">
               Citizenship
             </label>
@@ -83,11 +149,24 @@ const next = () => {
               name="citizenship"
               id="citizenship"
               autocomplete="citizenship"
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('citizenship')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.otherInfo.citizenship"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('citizenship')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Citizenship is required
+            </p>
           </div>
           <!-- Mobile Number -->
-          <div class="flex-auto">
+          <div class="flex-auto w-4/12">
             <label for="mobileNumber" class="text-sm font-light text-[#777777]">
               Mobile Number
             </label>
@@ -96,8 +175,21 @@ const next = () => {
               name="mobileNumber"
               id="mobileNumber"
               autocomplete="mobileNumber"
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('mobileNumber')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.otherInfo.mobileNumber"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('mobileNumber')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Mobile Number is required
+            </p>
           </div>
           <!-- Phone Number -->
           <div class="flex-auto">
@@ -110,7 +202,20 @@ const next = () => {
               id="phoneNumber"
               autocomplete="phoneNumber"
               class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('phoneNumber')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.otherInfo.phoneNumber"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('phoneNumber')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Phone Number is required
+            </p>
           </div>
           <!-- Website Link -->
           <div class="flex-auto">
@@ -122,8 +227,21 @@ const next = () => {
               name="websiteLink"
               id="websiteLink"
               autocomplete="websiteLink"
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('websiteLink')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.otherInfo.websiteLink"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('websiteLink')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Website Link is required
+            </p>
           </div>
           <!-- Facebook Link -->
           <div class="flex-auto">
@@ -135,8 +253,21 @@ const next = () => {
               name="facebookLink"
               id="facebookLink"
               autocomplete="facebookLink"
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('facebookLink')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
+              :value="registerData.otherInfo.facebookLink"
+              @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('websiteLink')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Facebook Link is required
+            </p>
           </div>
         </div>
         <div class="flex w-6/12 gap-x-4 mt-4">
