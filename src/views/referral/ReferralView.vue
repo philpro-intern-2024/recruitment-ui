@@ -1,6 +1,6 @@
 <script>
 // import { ref } from "vue";
-// import Header from "../../components/navigations/Header.vue"
+import Header from "../../components/navigations/Header.vue"
 // import Sidebar from "../../components/navigations/Sidebar.vue";
 import ReferralCards from "../../components/referral/ReferralCards.vue"
 import ReferralList from "../../components/referral/ReferralList.vue"
@@ -8,6 +8,7 @@ import ReferralList from "../../components/referral/ReferralList.vue"
 export default {
     name: "referral",
     components: {
+        Header,
         // NavbarClient,
         // Sidebar,
         ReferralCards,
@@ -30,6 +31,7 @@ export default {
 
 <template>
     <div>
+        <Header />
         <!-- <NavbarClient @click-burger="showSidebar = true" />
         <Sidebar :show="showSidebar" @close-sidebar="closeSidebar" /> -->
 
