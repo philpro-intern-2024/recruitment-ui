@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-
+import ReferralView from "../views/referral/ReferralView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +34,11 @@ const router = createRouter({
     //   name: 'support',
     //   component: SupportView
     // },
+    {
+      path: '/referral',
+      name: 'referral',
+      component: ReferralView
+    },
     // {
     //   path: '/login',
     //   name: 'login',

@@ -1,0 +1,44 @@
+[
+    {
+        "applicant_id": "123",
+        "name": "Russell Obsequio",
+        "date_join": "June 32, 2029",
+        "status": "Active"
+    },
+    {
+        "applicant_id": "124",
+        "name": "Vien Sacdalan",
+        "date_join": "June 36, 2029",
+        "status": "Inactive"
+    },
+    {
+        "applicant_id": "125",
+        "name": "Andrei Nuguid",
+        "date_join": "December 31, 2029",
+        "status": "Inactive"
+    },
+    {
+        "applicant_id": "126",
+        "name": "Rimel Johnson Batallones",
+        "date_join": "June 69, 2029",
+        "status": "Active"
+    },
+    {
+        "applicant_id": "127",
+        "name": "Jamiel Sumeracruz",
+        "date_join": "June 16, 2024",
+        "status": "Active"
+    },
+    {
+        "applicant_id": "128",
+        "name": "Angela Camille Adison",
+        "date_join": "June 12, 2024",
+        "status": "Inactive"
+    },
+    {
+        "applicant_id": "129",
+        "name": "Kaycee Dela Belmonte",
+        "date_join": "June 11, 2024",
+        "status": "Active"
+    }
+]

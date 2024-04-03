@@ -23,7 +23,16 @@ export default {
       "font-thin": ["Poppins-Thin", "sans-serif"],
       "font-thinItalic": ["Poppins-ThinItalic", "sans-serif"],
     },
-    extend: {},
+    extend: {
+      screens: {
+        sm: "320px",
+        md: "640px",
+        lg: "1024px",
+        xl: "1280px",
+        xxl: "1536px",
+        xxxl: "1920px",
+      },
+    },
   },
   plugins: [],
 };
