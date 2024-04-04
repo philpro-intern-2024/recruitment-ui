@@ -78,7 +78,7 @@ const profile = ref(null);
 const errorMessage = ref<string>("");
 const authStore = useAuthStore();
 const router = useRouter();
-const stepTitle = ref("SalesExp");
+const stepTitle = ref("SelectType");
 
 const next = (value: string) => {
   stepTitle.value = value;

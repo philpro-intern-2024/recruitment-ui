@@ -226,7 +226,12 @@ const onProfileChange = (e: any) => {
                     required
                     :value="registerData.terms"
                     @change="onChange($event)"
-                    class="mt-1 w-2/12 block py-3 px-3 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                    class="mt-1 w-2/12 block py-3 px-3 bg-white rounded-md focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                    :class="
+                      errorFields.includes('terms')
+                        ? 'border border-red-500'
+                        : 'border border-gray-300'
+                    "
                   />
                 </div>
                 <p
