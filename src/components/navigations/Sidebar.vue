@@ -19,10 +19,12 @@ const handleClose = () => {
   <transition name="slide">
     <div
       v-if="show"
-      class="z-50 fixed left-0 top-0 h-screen sm:w-full md:w-[400px] bg-white text-[131C39] z-10 rounded-xl"
+      class="z-50 fixed left-0 top-0 h-screen sm:w-full md:w-[15%] bg-white text-[131C39] z-10"
     >
-      <div class="h-1/4 flex justify-center bg-white rounded-tr-xl">
-        <img src="../../assets/imgs/logo.png" alt="" />
+      <div
+        class="h-[30%] flex justify-center items-center bg-white rounded-tr-xl"
+      >
+        <img src="../../assets/imgs/logo.png" class="h-[80%]" />
       </div>
       <button class="absolute top-4 right-4" @click="handleClose">
         <svg
@@ -40,7 +42,20 @@ const handleClose = () => {
           ></path>
         </svg>
       </button>
-      
+      <div class="h-[50%] text-white flex justify-center">
+        <ul class="flex flex-col justify-evenly w-full">
+          <li class="w-full">
+            <!-- Use router-link with button element -->
+            <router-link to="/dashboard">
+              <button
+                class="py-2 text-[#131C39] text-[19px] font-bold w-full hover:bg-gradient-to-r from-[#131C39] to-[#354E9F] hover:text-white transition-all duration-500"
+              >
+                DASHBOARD
+              </button>
+            </router-link>
+          </li>
+        </ul>
+      </div>
     </div>
   </transition>
 </template>
@@ -69,5 +84,14 @@ const handleClose = () => {
 .sidebar-link-active {
   background-color: #29374a;
   font-weight: bold;
+}
+button {
+  background-color: #ffffff;
+
+  transition: background-color 0.5s;
+}
+
+button:hover {
+  background-color: #354e9f;
 }
 </style>

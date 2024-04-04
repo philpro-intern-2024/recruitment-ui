@@ -17,7 +17,7 @@ const closeSidebar = () => {
 <template>
    <Sidebar v-model:show="showSidebar" @close-sidebar="closeSidebar" />
   <div
-    class="sm:h-[60px] sm:px-[3rem] xl:h-[80px] xl:px-[5rem] bg-gradient-to-r from-[#131C39] to-[#10121B] xxxl:h-[97px] xxxl:px-[10.5rem] flex flex-row"
+    class="sm:h-[60px] sm:px-[3rem] xl:h-[70px] xl:px-[5rem] bg-gradient-to-r from-[#131C39] to-[#10121B] xxxl:h-[90px] xxxl:px-[10.5rem] flex flex-row"
   >
     <div class="w-1/2 flex items-center">
       <button @click="toggleSidebar">
