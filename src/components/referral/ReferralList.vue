@@ -1,44 +1,46 @@
-<script setup lang="ts">
+<script>
 import { ref } from 'vue';
 import sampledata from "./SampleData.json"
 
-const show = ref(false);
-const SampleData = ref(sampledata)
+export default {
+    data() {
+        return {
+            tableHeader: [
+                "Applicant ID",
+                "Name",
+                "Date Join",
+                "Status",
+            ],
+            showDropdown: false,
+            data: sampledata,
+        }
+    },
+    methods: {
+        toggleDropdown() {
+            this.showDropdown = !this.showDropdown;
+        },
+        handleSort(select) {
+            const sort = select.toUpperCase()
 
-const tableHeader = [
-    "Applicant ID",
-    "Name",
-    "Date Join",
-    "Status",
-];
+            if (select !== "All") {
+                const getSort = sampledata.filter((item) =>
+                    item.status.toUpperCase() === sort
+                )
+                this.data = getSort
+            } else {
+                this.data = sampledata
+            }
+        },
+        handleSearch(e) {
+            const search = e.target.value.toUpperCase()
 
-const toggleDropdown = () => {
-    show.value = !show.value;
-};
-
-const handleSort = (select) => {
-    const sort = select.toUpperCase()
-
-    if (select !== "All") {
-        const getSort = sampledata.filter((item) =>
-            item.status.toUpperCase() === sort
-        )
-        SampleData.value = getSort
-    } else {
-        SampleData.value = sampledata
+            const getSearch = sampledata.filter((item) =>
+                item.applicant_id.includes(search) ||
+                item.name.toUpperCase().includes(search)
+            )
+            this.data = getSearch
+        }
     }
-
-}
-
-const handleSearch = (e) => {
-    const search = e.target.value.toUpperCase()
-
-    const getSearch = sampledata.filter((item) =>
-        item.applicant_id.includes(search) ||
-        item.name.toUpperCase().includes(search)
-    )
-
-    SampleData.value = getSearch
 }
 </script>
 
@@ -58,7 +60,7 @@ const handleSearch = (e) => {
                 </button>
 
                 <!-- Dropdown menu -->
-                <div id="dropdown" v-show="show"
+                <div id="dropdown" v-if="showDropdown"
                     class="z-10 absolute bg-white divide-y divide-gray-100 rounded-lg shadow w-44 px-2">
                     <ul class="py-2 text-sm text-black" aria-labelledby="dropdownDefaultButton">
                         <li class="w-full">
@@ -112,7 +114,7 @@ const handleSearch = (e) => {
 
                 <!-- TABLE BODY -->
                 <tbody>
-                    <tr v-for="items in SampleData" class="odd:bg-slate-100 text-center">
+                    <tr v-for="items in data" class="odd:bg-slate-100 text-center">
                         <td className="px-6 py-3">
                             <span className="text-center text-xs sm:text-sm text-black line-clamp-2 uppercase">
                                 {{ items.applicant_id }}
