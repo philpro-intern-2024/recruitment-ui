@@ -36,8 +36,8 @@ export interface OtherInfo {
 }
 
 export interface Addresses{
-  primary: AddressType;
-  secondary: AddressType | null;
+  permanent: AddressType;
+  present: AddressType | null;
 }
 
 export interface Education {

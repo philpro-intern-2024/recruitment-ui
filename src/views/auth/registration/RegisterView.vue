@@ -41,7 +41,7 @@ const registerData = reactive<RegisterData>({
     facebookLink: "",
   },
   address: {
-    primary: {
+    present: {
       country: "",
       province: "",
       city: "",
@@ -49,7 +49,7 @@ const registerData = reactive<RegisterData>({
       street: "",
       postalCode: "",
     },
-    secondary: {
+    permanent: {
       country: "",
       province: "",
       city: "",
@@ -78,7 +78,7 @@ const profile = ref(null);
 const errorMessage = ref<string>("");
 const authStore = useAuthStore();
 const router = useRouter();
-const stepTitle = ref("SelectType");
+const stepTitle = ref("SalesExp");
 
 const next = (value: string) => {
   stepTitle.value = value;
@@ -148,6 +148,7 @@ const submit = async () => {
       v-if="stepTitle === 'SalesExp'"
       @switch="next"
       :registerData="registerData"
+      :profile="profile"
       @submit="submit"
       @file="onFileChange"
     />

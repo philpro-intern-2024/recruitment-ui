@@ -4,17 +4,35 @@ import { ref, reactive } from "vue";
 
 const { registerData } = defineProps(["registerData"]);
 const emit = defineEmits(["switch"]);
+const errorFields = ref([] as string[]);
 
 const prev = () => {
   emit("switch", "Address");
 };
 
 const next = () => {
-  emit("switch", "SpecialSkills");
+  const error = checkEmptyFields();
+
+  if (error.length === 0) emit("switch", "SpecialSkills");
+  else errorFields.value = error;
 };
 
-const onChange = (e: any) =>
-  (registerData.education[e.target.name] = e.target.value);
+const onChange = (e: any) => {
+  registerData.education[e.target.name] = e.target.value;
+
+  const error = checkEmptyFields();
+
+  if (error) errorFields.value = error;
+};
+
+const checkEmptyFields = () => {
+  let arr = [];
+
+  for (const [key, value] of Object.entries(registerData.education))
+    if (value === "") arr.push(key);
+
+  return arr;
+};
 </script>
 
 <template>
@@ -46,10 +64,21 @@ const onChange = (e: any) =>
               id="institution"
               autocomplete="institution"
               required
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('institution')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
               :value="registerData.education.institution"
               @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('institution')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Institution is required
+            </p>
           </div>
           <!-- Username -->
           <div class="w-full">
@@ -61,10 +90,21 @@ const onChange = (e: any) =>
               name="degree"
               id="degree"
               autocomplete="degree"
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3  bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('degree')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
               :value="registerData.education.degree"
               @change="onChange($event)"
             />
+            <p
+              v-if="errorFields.includes('degree')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Degree is required
+            </p>
           </div>
         </div>
         <div class="flex w-6/12 gap-x-4 mt-4">

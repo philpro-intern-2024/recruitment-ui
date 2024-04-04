@@ -2,22 +2,51 @@
 import Stepper from "./Stepper.vue";
 import { ref, reactive } from "vue";
 
-const { registerData } = defineProps(["registerData"]);
+const { registerData, profile } = defineProps(["registerData", "profile"]);
 const emit = defineEmits(["switch", "file", "submit"]);
-const url = ref(null);
+const url = ref("");
+
+const errorFields = ref([] as string[]);
 
 const prev = () => {
   emit("switch", "SpecialSkills");
 };
 
+const submit = () => {
+  const error = checkEmptyFields();
+
+  if (error.length === 0) emit("submit");
+  else errorFields.value = error;
+};
+
 const onChange = (e: any) => {
   if (e.target.name === "terms") registerData.terms = e.target.checked;
   else registerData.salesExpRef[e.target.name] = e.target.value;
+
+  const error = checkEmptyFields();
+
+  if (error) errorFields.value = error;
+};
+
+const checkEmptyFields = () => {
+  let arr = [];
+
+  for (const [key, value] of Object.entries(registerData.salesExpRef))
+    if (value === "" || value === 0) arr.push(key);
+
+  if (profile.value === null) arr.push("profile");
+  if (!registerData.terms) arr.push("terms");
+
+  return arr;
 };
 
 const onProfileChange = (e: any) => {
   emit("file", e.target.files[0]);
   url.value = URL.createObjectURL(e.target.files[0]);
+
+  const error = checkEmptyFields();
+
+  if (error) errorFields.value = error;
 };
 </script>
 
@@ -51,10 +80,21 @@ const onProfileChange = (e: any) => {
                 name="jobDesc"
                 id="jobDesc"
                 autocomplete="jobDesc"
-                class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                :class="
+                  errorFields.includes('jobDesc')
+                    ? 'border border-red-500'
+                    : 'border border-gray-300'
+                "
                 :value="registerData.salesExpRef.jobDesc"
                 @change="onChange($event)"
               ></textarea>
+              <p
+                v-if="errorFields.includes('jobDesc')"
+                class="text-xs text-red-500 mt-1 font-thin"
+              >
+                Job Description is required
+              </p>
             </div>
 
             <!-- Sales Target Reached -->
@@ -71,10 +111,21 @@ const onProfileChange = (e: any) => {
                 id="salesTarget"
                 autocomplete="salesTarget"
                 required
-                class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                :class="
+                  errorFields.includes('salesTarget')
+                    ? 'border border-red-500'
+                    : 'border border-gray-300'
+                "
                 :value="registerData.salesExpRef.salesTarget"
                 @change="onChange($event)"
               />
+              <p
+                v-if="errorFields.includes('salesTarget')"
+                class="text-xs text-red-500 mt-1 font-thin"
+              >
+                Sales Target is required
+              </p>
             </div>
             <!-- References & Contact Number -->
             <div class="w-full">
@@ -86,10 +137,21 @@ const onProfileChange = (e: any) => {
                 name="references"
                 id="references"
                 autocomplete="references"
-                class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+                :class="
+                  errorFields.includes('references')
+                    ? 'border border-red-500'
+                    : 'border border-gray-300'
+                "
                 :value="registerData.salesExpRef.references"
                 @change="onChange($event)"
               ></textarea>
+              <p
+                v-if="errorFields.includes('references')"
+                class="text-xs text-red-500 mt-1 font-thin"
+              >
+                References & Contact Number is required
+              </p>
             </div>
           </div>
         </div>
@@ -121,9 +183,20 @@ const onProfileChange = (e: any) => {
                       autocomplete="profile"
                       accept="image/*"
                       @change="onProfileChange($event)"
-                      className="mt-1 border border-gray-300 block w-full text-sm text-slate-500 rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm file:mr-4 file:py-3 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-[#131C39] file:text-white"
+                      className="mt-1 block w-full text-sm text-slate-500 rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm file:mr-4 file:py-3 file:px-4  file:border-0 file:text-sm file:font-semibold file:bg-[#131C39] file:text-white"
+                      :class="
+                        errorFields.includes('profile')
+                          ? 'border border-red-500'
+                          : 'border border-gray-300'
+                      "
                     />
                   </label>
+                  <p
+                    v-if="errorFields.includes('profile')"
+                    class="text-xs text-red-500 mt-1 font-thin"
+                  >
+                    Photo is required
+                  </p>
                 </div>
               </div>
             </div>
@@ -156,11 +229,28 @@ const onProfileChange = (e: any) => {
                     class="mt-1 w-2/12 block py-3 px-3 border border-gray-300 bg-white rounded-md focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
                   />
                 </div>
+                <p
+                  v-if="errorFields.includes('terms')"
+                  class="text-xs text-red-500 font-thin"
+                >
+                  Terms and Agreement is required
+                </p>
               </div>
             </div>
           </div>
           <div class="w-6/12 border border-1">
-            <img :src="url" class="aspect-square object-cover w-full" alt="" />
+            <img
+              v-if="url !== ''"
+              :src="url"
+              class="aspect-square object-cover w-full"
+              alt=""
+            />
+            <img
+              v-else
+              src="../../../assets/imgs/placeholder-profile.png"
+              class="aspect-square object-cover w-full"
+              alt=""
+            />
           </div>
         </div>
         <div class="flex justify-center items-center">

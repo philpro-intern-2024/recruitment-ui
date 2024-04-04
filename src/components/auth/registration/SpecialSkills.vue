@@ -1,23 +1,32 @@
 <script setup lang="ts">
 import Stepper from "./Stepper.vue";
-import { ref, reactive } from "vue";
+import { ref, reactive, watch } from "vue";
+import { type SkillsProfExp } from "../../../stores/models/UserModel";
 
 const { registerData } = defineProps(["registerData"]);
 const emit = defineEmits(["switch"]);
 const tempSkill = ref("");
+const errorFields = ref([] as string[]);
 
 const prev = () => {
   emit("switch", "Education");
 };
 
 const next = () => {
-  emit("switch", "SalesExp");
+  const error = checkEmptyFields();
+
+  if (error.length === 0) emit("switch", "SalesExp");
+  else errorFields.value = error;
 };
 
 const addSkill = ($event: any) => {
   if ($event.key === "," && tempSkill) {
     if (!registerData.skillsProfExp.specialSkills.includes(tempSkill.value)) {
       registerData.skillsProfExp.specialSkills.push(tempSkill.value);
+
+      const error = checkEmptyFields();
+
+      if (error) errorFields.value = error;
     }
     tempSkill.value = "";
   }
@@ -28,10 +37,30 @@ const deleteSkill = (skill: string) => {
     registerData.skillsProfExp.specialSkills.filter((item: any) => {
       return skill !== item;
     });
+
+  const error = checkEmptyFields();
+
+  if (error) errorFields.value = error;
 };
 
-const onChange = (e: any) =>
-  (registerData.skillsProfExp[e.target.name] = e.target.value);
+const onChange = (e: any) => {
+  registerData.skillsProfExp[e.target.name] = e.target.value;
+
+  const error = checkEmptyFields();
+
+  if (error) errorFields.value = error;
+};
+
+const checkEmptyFields = () => {
+  let arr = [];
+
+  for (const [key, value] of Object.entries(
+    registerData.skillsProfExp as SkillsProfExp
+  ))
+    if (value === "" || value.length === 0) arr.push(key);
+
+  return arr;
+};
 </script>
 
 <template>
@@ -68,7 +97,12 @@ const onChange = (e: any) =>
               required
               @keyup.alt="addSkill"
               v-model="tempSkill"
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('specialSkills')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
             />
             <div
               v-for="skill in registerData.skillsProfExp.specialSkills"
@@ -84,9 +118,15 @@ const onChange = (e: any) =>
                 scale="1"
               />
             </div>
+            <p
+              v-if="errorFields.includes('specialSkills')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Special Skills are required
+            </p>
           </div>
 
-          <!-- Barangay -->
+          <!-- Work Experience -->
           <div class="w-full">
             <label
               for="workExperience"
@@ -99,17 +139,25 @@ const onChange = (e: any) =>
               name="workExperience"
               id="workExperience"
               autocomplete="workExperience"
-              class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
               :value="registerData.skillsProfExp.workExperience"
+              :class="
+                errorFields.includes('workExperience')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
               @change="onChange($event)"
             ></textarea>
+            <p
+              v-if="errorFields.includes('workExperience')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Work Experience is required
+            </p>
           </div>
           <!-- About Yourself -->
           <div class="w-full">
-            <label
-              for="about"
-              class="text-sm font-light text-[#777777]"
-            >
+            <label for="about" class="text-sm font-light text-[#777777]">
               Tell Us About Yourself
             </label>
             <textarea
@@ -118,9 +166,20 @@ const onChange = (e: any) =>
               id="about"
               autocomplete="about"
               class="mt-1 w-full block py-3 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
+              :class="
+                errorFields.includes('about')
+                  ? 'border border-red-500'
+                  : 'border border-gray-300'
+              "
               :value="registerData.skillsProfExp.about"
               @change="onChange($event)"
             ></textarea>
+            <p
+              v-if="errorFields.includes('about')"
+              class="text-xs text-red-500 mt-1 font-thin"
+            >
+              Tell Us About Yourself is required
+            </p>
           </div>
         </div>
         <div class="flex w-6/12 gap-x-4 mt-4">

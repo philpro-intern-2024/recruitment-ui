@@ -55,12 +55,10 @@ const checkEmptyFields = () => {
             <label for="prefix" class="text-sm font-light text-[#777777]">
               Prefix
             </label>
-            <input
-              type="text"
+            <select
               name="prefix"
               id="prefix"
               autocomplete="prefix"
-              required
               class="mt-1 w-full block py-3 px-3 bg-white rounded-md shadow-sm focus:outline-none focus:ring-[#131C39] focus:border-[#131C39] sm:text-sm"
               :class="
                 errorFields.includes('prefix')
@@ -69,7 +67,14 @@ const checkEmptyFields = () => {
               "
               :value="registerData.personalInfo.prefix"
               @change="onChange($event)"
-            />
+            >
+              <option
+                v-for="item in ['Mr.', 'Ms.', 'Miss', 'Mrs.', 'Mx.']"
+                :key="item"
+              >
+                {{ item }}
+              </option>
+            </select>
             <p
               v-if="errorFields.includes('prefix')"
               class="text-xs text-red-500 mt-1 font-thin"
@@ -150,6 +155,7 @@ const checkEmptyFields = () => {
             <label for="suffix" class="text-sm font-light text-[#777777]">
               Suffix
             </label>
+
             <input
               type="text"
               name="suffix"
