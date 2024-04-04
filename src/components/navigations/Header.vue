@@ -1,20 +1,29 @@
 <script setup lang="ts">
-const emit = defineEmits(["click-burger"]);
+import { ref } from 'vue';
+import Sidebar from './Sidebar.vue';
+
+const showSidebar = ref(false);
 
 const toggleSidebar = () => {
-  emit("click-burger");
+  showSidebar.value = !showSidebar.value;
+};
+
+const closeSidebar = () => {
+  showSidebar.value = false;
 };
 </script>
 
+
 <template>
+   <Sidebar v-model:show="showSidebar" @close-sidebar="closeSidebar" />
   <div
-    class="h-[97px] bg-gradient-to-r from-[#131C39] to-[#10121B] px-[10.5rem] flex flex-row"
+    class="sm:h-[60px] sm:px-[3rem] xl:h-[80px] xl:px-[5rem] bg-gradient-to-r from-[#131C39] to-[#10121B] xxxl:h-[97px] xxxl:px-[10.5rem] flex flex-row"
   >
     <div class="w-1/2 flex items-center">
       <button @click="toggleSidebar">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-12 w-12 hover:scale-95"
+          class="sm:h-[2rem] sm:w-[2rem] xl:h-[3rem] xl:w-[3rem] xxxl:h-[4rem] xxxl:w-[4rem] hover:scale-95"
           fill="none"
           viewBox="0 0 24 24"
           stroke="white"
@@ -28,12 +37,12 @@ const toggleSidebar = () => {
         </svg>
       </button>
     </div>
-    <div class="w-1/2 flex justify-end space-x-10 py-6">
-      <button class=" p-1 rounded-[2rem]">
+    <div class="w-1/2 flex justify-end items-center sm:space-x-4  xl:space-x-9 xxxl:space-x-10 py-6">
+      <button class="sm:h-[1.8rem] sm:w-[1.8rem] xl:h-[2.5rem] xl:w-[2.5rem] xxxl:h-[3.5rem] xxxl:w-[3.5rem]  xxxl:p-1 rounded-[2rem]">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="40"
-          height="41"
+          width=""
+          height=""
           viewBox="0 0 512 512"
           id="bell"
           fill="white"
@@ -44,10 +53,10 @@ const toggleSidebar = () => {
         </svg>
       </button>
 
-      <button class="bg-white p-1 rounded-[2rem]">
+      <button class="flex sm:h-[1.8rem] sm:w-[1.8rem] sm:py-1 xl:h-[2.5rem] xl:w-[2.5rem] xxxl:h-[3.5rem] xxxl:w-[3.5rem] bg-white xxxl:p-1 rounded-[2rem] justify-center">
         <svg
           fill="none"
-          height="30"
+          height=""
           viewBox="0 0 24 24"
           width="40"
           xmlns="http://www.w3.org/2000/svg"
